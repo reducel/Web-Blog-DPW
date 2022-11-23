@@ -11,21 +11,22 @@
                     <h4>@yield('title')</h4>
                 </div>
                 <div class="card-body">
-                    <form class="form form-horizontal">
+                    <form class="form form-horizontal" action="{{route('product.store')}}" method="POST" enctype="multipart/form-data">
+                        @csrf
                         <div class="form-body">
                             <div class="row">
                                 <div class="col-md-4">
                                     <label>Masukan Nama Product</label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="first-name" class="form-control" name="fname"
+                                    <input type="text" id="first-name" class="form-control" name="title"
                                         placeholder="Masukan Nama Product">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Masukan Harga Product</label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="number" id="contact-info" class="form-control" name="contact"
+                                    <input type="number" id="contact-info" class="form-control" name="harga"
                                         placeholder="Masukan Harga Product">
                                 </div>
                                 <div class="col-md-4">
@@ -33,10 +34,10 @@
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <fieldset class="form-group">
-                                        <select class="form-select" id="basicSelect">
+                                        <select class="form-select" id="basicSelect" name="status">
                                             <option>-- Pilih --</option>
-                                            <option value="publish">Blade Runner</option>
-                                            <option value="draft">Thor Ragnarok</option>
+                                            <option value="publish">Publish</option>
+                                            <option value="draft">Draft</option>
                                         </select>
                                     </fieldset>
                                 </div>
@@ -45,7 +46,7 @@
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <!-- Basic file uploader -->
-                                    <input type="file" class="basic-filepond">
+                                    <input type="file" name="image" class="form-control">
                                 </div>
                                 <div class="col-sm-12 d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>

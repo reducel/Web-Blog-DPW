@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Backend\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -36,7 +37,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // menangkap seluruh request dari form
+        // dd($request->all());
+        // ORM CREATE 
+        // Product::create([
+        //     'title' => $request->title,
+        //     'harga' => $request->harga,
+        //     'status' => $request->status,
+        //     'image' => $request->image
+        // ]);
+
+        // Query Builder
+        // DB::table('products')->insert([
+        //     'title' => $request->title
+        // ]);
+
+        return redirect()->route('product.index');
     }
 
     /**
