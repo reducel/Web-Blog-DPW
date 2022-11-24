@@ -14,7 +14,7 @@
                     {{-- route disini merupakan bagian edit yang membawa parameter id bisa dicek pada web.php --}}
                     <form class="form" action="{{ route('product.update', $data->id) }}" method="POST"
                         enctype="multipart/form-data">
-                        @csrf
+                        @csrf @method("PATCH")
                         <div class="row">
                             <div class="col-md-5">
                                 <img src="{{ asset('assets/no-image.jpeg') }}" class="img-fluid shadow-sm"

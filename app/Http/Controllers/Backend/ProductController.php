@@ -47,7 +47,7 @@ class ProductController extends Controller
         $request->validate([
             'title' => 'required',
             'harga' => 'required|numeric',
-            'image' => 'required|image|mimes:|size:2048',
+            'image' => 'required|image|mimes:jpg,png,jpeg',
             'status' => 'required',
             'desc' => 'required'
         ], [
@@ -72,7 +72,7 @@ class ProductController extends Controller
         # akhir query
 
         # menentukan folder mana yang akan menyimpan gambar hasil upload kita
-        $request->image->storeAs('img', $imageName);
+        $request->image->move(public_path('img'), $imageName);
         # kita akan menyimpan gambar pada folder public/storage/img/namafile.png
 
         // balikan ke halaman list product
@@ -123,7 +123,7 @@ class ProductController extends Controller
         $request->validate([
             'title' => 'required',
             'harga' => 'required|numeric',
-            'image' => 'image|mimes:|size:2048',
+            'image' => 'image|mimes:jpg,png,jpeg',
             'status' => 'required',
             'desc' => 'required'
         ], [
@@ -142,7 +142,7 @@ class ProductController extends Controller
             # jika da request image / thumbnail maka system akan mengganti gambar tersebut
 
             # gunakan fitur unlink untuk menghapus gambar pada folder penyimpanan kita sesuai dengan nama file pada database
-            unlink(storage_path('img' . $data->image));
+            unlink(public_path('img/' . $data->image));
 
             # jika sudah berhasil menghapus maka kita buat persiapan untuk gambar baru
 
@@ -156,7 +156,7 @@ class ProductController extends Controller
             # akhir query
 
             # menentukan folder mana yang akan menyimpan gambar hasil upload kita
-            $request->image->storeAs('img', $imageName);
+            $request->image->move(public_path('img'), $imageName);
             # kita akan menyimpan gambar pada folder public/storage/img/namafile.png
 
         } else {
@@ -189,7 +189,7 @@ class ProductController extends Controller
         }
 
         # gunakan fitur unlink untuk menghapus gambar pada folder penyimpanan kita sesuai dengan nama file pada database
-        unlink(storage_path('img' . $data->image));
+        unlink(public_path('img/' . $data->image));
 
         # gunakan query delete orm untuk menghapus data pada tabel
 

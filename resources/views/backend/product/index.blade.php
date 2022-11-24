@@ -86,32 +86,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td class="text-bold-500">Source Code Whatsapp Gateway</td>
-                                    <td>PHP</td>
-                                    <td>Rp. 100.000</td>
-                                    <td>
-                                        <span class="badge bg-warning">DRAFT</span>
-                                    </td>
-                                    <td class="text-bold-500">
-                                        <a href="#" class="btn icon btn-primary"><i class="bi bi-pencil"></i></a>
-                                        <a href="#" class="btn icon btn-danger"><i class="bi bi-trash"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">2</td>
-                                    <td class="text-bold-500">Source Code Whatsapp Gateway</td>
-                                    <td>PHP</td>
-                                    <td>Rp. 100.000</td>
-                                    <td>
-                                        <span class="badge bg-success">PUBLISH</span>
-                                    </td>
-                                    <td class="text-bold-500">
-                                        <a href="#" class="btn icon btn-primary"><i class="bi bi-pencil"></i></a>
-                                        <a href="#" class="btn icon btn-danger"><i class="bi bi-trash"></i></a>
-                                    </td>
-                                </tr>
+                                @foreach ($data as $item)
+                                    <tr>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
+                                        <td class="text-bold-500">{{ $item->title }}</td>
+                                        <td>PHP</td>
+                                        <td>Rp. {{ number_format($item->harga) }}</td>
+                                        <td>
+                                            <span
+                                                class="badge {{ $item->status == 'publish' ? 'bg-success' : 'bg-danger' }}">{{ $item->status }}</span>
+                                        </td>
+                                        <td class="text-bold-500 d-flex">
+                                            <a href="{{ route('product.edit', $item->id) }}"
+                                                class="btn icon btn-primary me-2"><i class="bi bi-pencil"></i></a>
+                                            <form action="{{ route('product.destroy', $item->id) }}" method="POST">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn icon btn-danger"><i
+                                                        class="bi bi-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
