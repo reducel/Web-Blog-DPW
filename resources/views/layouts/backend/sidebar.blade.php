@@ -27,10 +27,10 @@
 
         <li class="sidebar-title">Kelola Orderan</li>
 
-        <li class="sidebar-item {{ (request()->is('v1/cities')) ? 'active' : '' }}">
-            <a href="https://wa.me/6281912488040" target="__blank" class='sidebar-link'>
+        <li class="sidebar-item {{ (request()->is('v1/orderan*')) ? 'active' : '' }}">
+            <a href="{{ route('orderan.index')}}" class='sidebar-link'>
                 <i class="bi bi-cart-fill"></i>
-                <span>Orderan Saya</span>
+                <span>Orderan Masuk</span>
             </a>
         </li>
 

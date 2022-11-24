@@ -9,6 +9,8 @@ class OrderanController extends Controller
 {
     public function index()
     {
-        //
+        # list orderan gunakan variabel untuk menampung seluruh isi
+        // $data = Orderan::with()->get();
+        return view('backend.orders.index');
     }
 }

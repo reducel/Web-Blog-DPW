@@ -16,7 +16,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('backend.product.index');
+        # membuat variabel untuk menampung data product
+        $data = Product::query()
+            ->get();
+
+        # mengembalikan ke dalam template dengan membawa variabel
+        return view('backend.product.index', compact('data'));
     }
 
     /**
@@ -26,6 +31,7 @@ class ProductController extends Controller
      */
     public function create()
     {
+        # membuat template create product
         return view('backend.product.create');
     }
 
@@ -37,33 +43,40 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // menangkap seluruh request dari form
-        // dd($request->all());
-        // ORM CREATE 
-        // Product::create([
-        //     'title' => $request->title,
-        //     'harga' => $request->harga,
-        //     'status' => $request->status,
-        //     'image' => $request->image
-        // ]);
+        // validasi request dari form 
+        $request->validate([
+            'title' => 'required',
+            'harga' => 'required|numeric',
+            'image' => 'required|image|mimes:|size:2048',
+            'status' => 'required',
+            'desc' => 'required'
+        ], [
+            'title.required' => 'Wajib di isi',
+            'harga.required' => 'Wajib di isi',
+            'harga.numeric' => 'Harga Wajib Angka',
+            'image.required' => 'Wajib di isi',
+            'image.image' => 'Wajib berupa image',
+            'image.mimes' => 'Gambar Hanya JPG dan PNG',
+            'image.size' => 'Size Gambar Hanya Max 2 MB',
+            'status.required' => 'Wajib di isi',
+            'desc.required' => 'Wajib di isi'
+        ]);
 
-        // Query Builder
-        // DB::table('products')->insert([
-        //     'title' => $request->title
-        // ]);
+        # membuat variabel baru untuk penamaan file image kita menggunakan time() agar unique tidak sama dengan gambar lain
+        $imageName = time() . '.' . $request->image->extension();
 
-        return redirect()->route('product.index');
-    }
+        # gunakan query untuk update data baru kedalam database dengan memanggil model product
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        # awal query
+
+        # akhir query
+
+        # menentukan folder mana yang akan menyimpan gambar hasil upload kita
+        $request->image->storeAs('img', $imageName);
+        # kita akan menyimpan gambar pada folder public/storage/img/namafile.png
+
+        // balikan ke halaman list product
+        return redirect()->route('product.index')->with('success', 'Product Berhasil di tambahkan');
     }
 
     /**
@@ -74,7 +87,18 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        # membuat variabel untuk menampung data produk dari where by Id
+        $data = Product::find($id);
+
+        # gunakan if kondisi jika data diatas kosong atau ID tidak sesuai pada database
+        if (empty($data)) {
+            # jika data kosong empty() maka 
+            return redirect()->route('product.index')->with('galat', 'product not found');
+            # fungsi with() adalah untuk membawa notifikasi dengan session yang berupa pemberitahuan
+        }
+
+        # jika variabel data ada tidak kosong maka kita kembalikan kedalam view edit untuk mengubah data tersebut
+        return view('backend.product.edit', compact('data'));
     }
 
     /**
@@ -86,7 +110,65 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        # membuat variabel untuk cek apakah id tersebut ada atau tidak menggunakan find / where by id 
+        $data = Product::find($id);
+
+        # membuat if satu kondisi dimana jika kosong data tersebut akan di kembalikan
+        if (empty($data)) {
+            # kembalikan ke halaman list product dengan notifikasi with
+            return redirect()->route('product.index')->with('galat', 'product not found');
+        }
+
+        # membuat validasi kembali dari request yang didapatkan dari form update
+        $request->validate([
+            'title' => 'required',
+            'harga' => 'required|numeric',
+            'image' => 'image|mimes:|size:2048',
+            'status' => 'required',
+            'desc' => 'required'
+        ], [
+            'title.required' => 'Wajib di isi',
+            'harga.required' => 'Wajib di isi',
+            'harga.numeric' => 'Harga Wajib Angka',
+            'image.required' => 'Wajib di isi',
+            'image.mimes' => 'Gambar Hanya JPG dan PNG',
+            'image.size' => 'Size Gambar Hanya Max 2 MB',
+            'status.required' => 'Wajib di isi',
+            'desc.required' => 'Wajib di isi'
+        ]);
+
+        # membuat if 2 kondisi dimana jika ada request pergantian thumbnail atau gambar maka
+        if ($request->image) {
+            # jika da request image / thumbnail maka system akan mengganti gambar tersebut
+
+            # gunakan fitur unlink untuk menghapus gambar pada folder penyimpanan kita sesuai dengan nama file pada database
+            unlink(storage_path('img' . $data->image));
+
+            # jika sudah berhasil menghapus maka kita buat persiapan untuk gambar baru
+
+            # membuat variabel baru untuk penamaan file image kita menggunakan time() agar unique tidak sama dengan gambar lain
+            $imageName = time() . '.' . $request->image->extension();
+
+            # gunakan query untuk update data baru kedalam database dengan memanggil model product
+
+            # awal query
+
+            # akhir query
+
+            # menentukan folder mana yang akan menyimpan gambar hasil upload kita
+            $request->image->storeAs('img', $imageName);
+            # kita akan menyimpan gambar pada folder public/storage/img/namafile.png
+
+        } else {
+            # jika tidak ada request image maka memanggil query update dengan model
+
+            # awal query
+
+            # akhir query
+        }
+
+        # kembalikan hasil controller ini ke halaman list product
+        return redirect()->route('product.index')->with('success', 'Product Berhasil di Update');
     }
 
     /**
@@ -97,6 +179,25 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        # membuat variabel untuk cek apakah id tersebut ada atau tidak menggunakan find / where by id 
+        $data = Product::find($id);
+
+        # membuat if satu kondisi dimana jika kosong data tersebut akan di kembalikan
+        if (empty($data)) {
+            # kembalikan ke halaman list product dengan notifikasi with
+            return redirect()->route('product.index')->with('galat', 'product not found');
+        }
+
+        # gunakan fitur unlink untuk menghapus gambar pada folder penyimpanan kita sesuai dengan nama file pada database
+        unlink(storage_path('img' . $data->image));
+
+        # gunakan query delete orm untuk menghapus data pada tabel
+
+        # awal query
+
+        # akhir query
+
+        # kembalikan hasil controller ini ke halaman list product
+        return redirect()->route('product.index')->with('success', 'Product Berhasil di Hapus');
     }
 }

@@ -34,7 +34,7 @@ Route::prefix('v1')->group(function () {
     Route::resource('users', App\Http\Controllers\Backend\ProductController::class);
 
     // route orders
-    Route::get('orders', [App\Http\Controllers\Backend\OrderanController::class, 'index'])->name('orderan.index');
+    Route::get('orderan', [App\Http\Controllers\Backend\OrderanController::class, 'index'])->name('orderan.index');
 
     // route reviews
     Route::get('review', [App\Http\Controllers\Backend\ReviewController::class, 'index'])->name('review.index');

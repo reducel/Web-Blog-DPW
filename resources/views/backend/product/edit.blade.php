@@ -1,6 +1,6 @@
 @extends('layouts.backend.master')
 @section('title')
-    Tambah Product Baru
+    Edit Produk : {{ $data->title }}
 @endsection
 
 @section('content')
@@ -11,7 +11,9 @@
                     <h4>@yield('title')</h4>
                 </div>
                 <div class="card-body">
-                    <form class="form" action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
+                    {{-- route disini merupakan bagian edit yang membawa parameter id bisa dicek pada web.php --}}
+                    <form class="form" action="{{ route('product.update', $data->id) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-5">
@@ -29,7 +31,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Nama Produk</label>
                                     <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                        name="title" value="{{ old('title') }}" autocomplete="off">
+                                        name="title" value="{{ $data->title }}" autocomplete="off">
                                     @error('title')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -39,7 +41,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Masukan Harga Produk</label>
                                     <input type="number" class="form-control @error('harga') is-invalid @enderror"
-                                        name="harga" value="{{ old('harga') }}" autocomplete="off">
+                                        name="harga" value="{{ $data->harga }}" autocomplete="off">
                                     @error('harga')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -52,9 +54,9 @@
                                         <select class="form-select @error('status') is-invalid @enderror" id="basicSelect"
                                             name="status">
                                             <option value="">-- Pilih --</option>
-                                            <option {{ old('status') == 'publish' ? 'selected' : '' }} value="publish">
+                                            <option {{ $data->status == 'publish' ? 'selected' : '' }} value="publish">
                                                 Publish</option>
-                                            <option {{ old('status') == 'draft' ? 'selected' : '' }} value="draft">Draft
+                                            <option {{ $data->status == 'draft' ? 'selected' : '' }} value="draft">Draft
                                             </option>
                                         </select>
                                         @error('status')
@@ -78,7 +80,7 @@
                         </div>
                         <div class="mb-4">
                             <label for="summernote" class="form-label">Deskripsi Produk</label>
-                            <textarea class="form-control @error('desc') is-invalid @enderror" id="summernote" name="desc" rows="3">{!! old('desc') !!}</textarea>
+                            <textarea class="form-control @error('desc') is-invalid @enderror" id="summernote" name="desc" rows="3">{!! $data->desc !!}</textarea>
                             @error('desc')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
