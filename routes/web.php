@@ -14,16 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
+Route::get('/product', [App\Http\Controllers\HomeController::class, 'product'])->name('list.product');
+Route::get('/product/{slug}', [App\Http\Controllers\HomeController::class, 'detail'])->name('detail');
+Route::get('/cart', [App\Http\Controllers\HomeController::class, 'cart'])->name('cart');
+Route::post('/cart', [App\Http\Controllers\HomeController::class, 'add_to_cart'])->name('add_to_cart');
+Route::delete('/cart/{id}', [App\Http\Controllers\HomeController::class, 'destroy_cart_product'])->name('destroy_cart_product');
 
 Auth::routes();
 
 // prefixs url, seluruh url mengandung awalan v1
 // contoh http://127.0.0.1:8000/v1/product dan seterusnya
 Route::prefix('v1')->group(function () {
-    
+
     // dashboard 
     Route::get('', [App\Http\Controllers\Backend\IndexController::class, 'index'])->name('dashboard');
 
@@ -38,6 +41,4 @@ Route::prefix('v1')->group(function () {
 
     // route reviews
     Route::get('review', [App\Http\Controllers\Backend\ReviewController::class, 'index'])->name('review.index');
-
 });
-
