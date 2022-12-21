@@ -51,8 +51,8 @@ class ProductController extends Controller
             'status' => 'required',
             'desc' => 'required'
         ], [
-            'title.required' => 'Wajib di isi',
-            'harga.required' => 'Wajib di isi',
+            'title.required' => 'Mohon di isi',
+            'harga.required' => 'woi isi woi',
             'harga.numeric' => 'Harga Wajib Angka',
             'image.required' => 'Wajib di isi',
             'image.image' => 'Wajib berupa image',
@@ -64,10 +64,20 @@ class ProductController extends Controller
 
         # membuat variabel baru untuk penamaan file image kita menggunakan time() agar unique tidak sama dengan gambar lain
         $imageName = time() . '.' . $request->image->extension();
+        // dd($imageName);
+        // data yang dibuat mirip dengan aslinya, tapi isinya sendiri yang dibuat-buat
 
         # gunakan query untuk update data baru kedalam database dengan memanggil model product
 
         # awal query
+
+        product::create([
+            'title' => $request->title,
+            'harga' => $request->harga,
+            'image' => $imageName,
+            'status' => $request->status,
+            'desc' => $request->desc
+        ]);
 
         # akhir query
 
